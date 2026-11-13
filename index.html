@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GridSync.id - Racing Group & Gate Randomizer</title>
+  <title>GridSync.id - Starting Grid & Giveaway Picker</title>
   <!-- Library SheetJS untuk baca & tulis file Excel (.xlsx) -->
   <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
   <style>
@@ -16,10 +16,11 @@
       padding: 24px;
       background-color: #090d16;
       color: #f8fafc;
+      overflow-x: hidden;
     }
     .header {
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 24px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -35,7 +36,7 @@
       justify-content: center;
     }
     .logo-wrapper svg {
-      height: 68px;
+      height: 64px;
       width: auto;
       display: block;
     }
@@ -45,6 +46,58 @@
       font-size: 14px;
       letter-spacing: 0.5px;
     }
+
+    /* NAVIGASI TAB HALAMAN */
+    .nav-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      max-width: 640px;
+      margin: 0 auto 28px;
+      background: #121824;
+      padding: 6px;
+      border-radius: 12px;
+      border: 1px solid #1e293b;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 11px 16px;
+      background: transparent;
+      color: #94a3b8;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .tab-btn:hover {
+      color: #f8fafc;
+      background: #1e293b;
+    }
+    .tab-btn.active {
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35);
+    }
+
+    .tab-section {
+      display: none;
+    }
+    .tab-section.active {
+      display: block;
+      animation: fadeIn 0.25s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* GRID UTAMA */
     .main-grid {
       display: grid;
       grid-template-columns: 380px 1fr;
@@ -70,7 +123,7 @@
       font-size: 16px;
       border-bottom: 1px solid #1e293b;
       padding-bottom: 10px;
-      color: #ef4444;
+      color: #fb923c; 
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
@@ -85,7 +138,7 @@
       transition: border-color 0.2s, background 0.2s;
     }
     .file-upload-box:hover {
-      border-color: #dc2626;
+      border-color: #f97316; 
       background: #182232;
     }
     .file-upload-box input {
@@ -94,7 +147,7 @@
     .btn-link {
       background: none;
       border: none;
-      color: #f87171;
+      color: #fdba74; 
       text-decoration: underline;
       font-size: 13px;
       cursor: pointer;
@@ -103,7 +156,7 @@
     }
     textarea {
       width: 100%;
-      height: 140px;
+      height: 150px;
       margin-top: 12px;
       padding: 10px;
       background: #0f172a;
@@ -115,12 +168,12 @@
     }
     textarea:focus, select:focus, input:focus {
       outline: none;
-      border-color: #dc2626;
+      border-color: #f97316; 
     }
     .badge-count {
       display: inline-block;
       background: #1e293b;
-      color: #fca5a5;
+      color: #fdba74; 
       font-weight: 600;
       font-size: 13px;
       padding: 4px 10px;
@@ -138,6 +191,21 @@
       margin-bottom: 6px;
       color: #cbd5e1;
     }
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13.5px;
+      color: #cbd5e1;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    .checkbox-row input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: #f97316;
+      cursor: pointer;
+    }
     select, input[type="number"], input[type="text"] {
       width: 100%;
       padding: 9px 12px;
@@ -150,18 +218,18 @@
     .btn-primary {
       width: 100%;
       padding: 12px;
-      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      background: linear-gradient(135deg, #f97316, #ea580c); 
       color: #fff;
       border: none;
       border-radius: 8px;
       font-size: 15px;
       font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+      box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
       transition: transform 0.1s, opacity 0.2s;
     }
     .btn-primary:hover {
-      opacity: 0.9;
+      opacity: 0.92;
       transform: translateY(-1px);
     }
     .btn-primary:disabled {
@@ -191,6 +259,20 @@
       cursor: not-allowed;
       box-shadow: none;
     }
+    .btn-secondary {
+      padding: 8px 14px;
+      background: #1e293b;
+      color: #cbd5e1;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-secondary:hover {
+      background: #334155;
+      color: #fff;
+    }
     .results-header {
       display: flex;
       justify-content: space-between;
@@ -207,7 +289,7 @@
     .group-card {
       background: #121824;
       border-radius: 10px;
-      border-top: 4px solid #dc2626;
+      border-top: 4px solid #f97316; 
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
       overflow: hidden;
       border-left: 1px solid #1e293b;
@@ -265,7 +347,7 @@
       min-width: 52px;
       text-align: center;
     }
-    .badge-gate.m1 { background: #7f1d1d; color: #fca5a5; border: 1px solid #991b1b; }
+    .badge-gate.m1 { background: #7c2d12; color: #fdba74; border: 1px solid #9a3412; } 
     .badge-gate.m2 { background: #14532d; color: #86efac; border: 1px solid #166534; }
 
     .empty-state {
@@ -275,6 +357,97 @@
       border-radius: 12px;
       color: #64748b;
       border: 1px dashed #334155;
+    }
+
+    /* GIVEAWAY STAGE & WINNER STYLES */
+    .stage-box {
+      background: radial-gradient(circle at top, #1e293b 0%, #121824 75%);
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 36px 24px;
+      text-align: center;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+    .stage-label {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #fb923c;
+      margin-bottom: 14px;
+    }
+    .rolling-display {
+      background: #090d16;
+      border: 2px solid #f97316;
+      border-radius: 12px;
+      padding: 24px 20px;
+      font-size: 28px;
+      font-weight: 800;
+      color: #ffffff;
+      min-height: 92px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 0 20px rgba(249, 115, 22, 0.15);
+      word-break: break-word;
+    }
+    .rolling-display .sub-comment {
+      font-size: 14px;
+      font-weight: 400;
+      color: #94a3b8;
+      margin-top: 6px;
+    }
+    .winner-card-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+    }
+    .winner-item {
+      background: #121824;
+      border: 1px solid #334155;
+      border-left: 4px solid #f97316;
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .winner-rank {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #fb923c;
+      letter-spacing: 0.5px;
+    }
+    .winner-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+    .winner-comment {
+      font-size: 13px;
+      color: #94a3b8;
+      font-style: italic;
+    }
+
+    /* CONFETTI PARTICLES */
+    .confetti-piece {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      top: -10px;
+      z-index: 9999;
+      pointer-events: none;
+      animation: fall linear forwards;
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(105vh) rotate(720deg);
+      }
     }
   </style>
 </head>
@@ -298,24 +471,38 @@
         <text x="247" y="142" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="22.5" fill="#042347" letter-spacing="0.4">STARTING GRID GENERATOR</text>
       </svg>
     </div>
-    <p>Official Starting Grid Generator</p>
+    <p>Official Race Grid and event Giveaway </p>
   </div>
 
-  <div class="main-grid">
-    <!-- PANEL KIRI -->
-    <div>
-      <div class="card">
-        <h3>1. Data Peserta / Pembalap</h3>
-        <label class="file-upload-box" for="excelFile">
-          <div style="font-weight: 600; color: #f87171;">Klik untuk Upload File Excel (.xlsx / .csv)</div>
-          <div style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Membaca daftar pembalap pada kolom pertama</div>
-          <input type="file" id="excelFile" accept=".xlsx, .xls, .csv">
-        </label>
-        <div style="text-align: center;">
-          <button type="button" class="btn-link" id="downloadTemplateBtn">Download Contoh Template Excel</button>
-        </div>
+  <!-- NAVIGASI ANTAR HALAMAN -->
+  <div class="nav-tabs">
+    <button type="button" class="tab-btn active" data-target="gridSection">
+      🏁 Starting Grid 
+    </button>
+    <button type="button" class="tab-btn" data-target="giveawaySection">
+      🎁 Giveaway Comment Picker
+    </button>
+  </div>
 
-        <textarea id="participantsInput" placeholder="Atau ketik/paste daftar pembalap di sini (1 baris = 1 pembalap)...">Rider 01 - Andi
+  <!-- =========================================================
+       HALAMAN 1: STARTING GRID RANDOMIZER
+  ========================================================= -->
+  <div id="gridSection" class="tab-section active">
+    <div class="main-grid">
+      <!-- PANEL KIRI -->
+      <div>
+        <div class="card">
+          <h3>1. Data Peserta / Pembalap</h3>
+          <label class="file-upload-box" for="excelFile">
+            <div style="font-weight: 600; color: #fdba74;">Klik untuk Upload File Excel (.xlsx / .csv)</div>
+            <div style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Membaca daftar pembalap pada kolom pertama</div>
+            <input type="file" id="excelFile" accept=".xlsx, .xls, .csv">
+          </label>
+          <div style="text-align: center;">
+            <button type="button" class="btn-link" id="downloadTemplateBtn">Download Contoh Template Excel</button>
+          </div>
+
+          <textarea id="participantsInput" placeholder="Atau ketik/paste daftar pembalap di sini (1 baris = 1 pembalap)...">Rider 01 - Andi
 Rider 02 - Budi
 Rider 03 - Citra
 Rider 04 - Dimas
@@ -327,53 +514,145 @@ Rider 09 - Indra
 Rider 10 - Joko
 Rider 11 - Kevin
 Rider 12 - Linda</textarea>
-        <div>
-          <span class="badge-count" id="totalCountBadge">Total Peserta: 12</span>
+          <div>
+            <span class="badge-count" id="totalCountBadge">Total Peserta: 12</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>2. Pengaturan Grup</h3>
+          <div class="form-group">
+            <label>Awali Nama Grup Dengan:</label>
+            <input type="text" id="groupPrefix" value="Kelas / Grup" placeholder="Contoh: Kelas, Grup, Heat">
+          </div>
+
+          <div class="form-group">
+            <label>Metode Pembagian Grup:</label>
+            <select id="splitMode">
+              <option value="byCount">Berdasarkan Jumlah Grup</option>
+              <option value="byCapacity">Berdasarkan Maksimal per Grup</option>
+            </select>
+          </div>
+
+          <div id="modeByCountBox" class="form-group">
+            <label>Jumlah Grup:</label>
+            <input type="number" id="numGroups" value="1" min="1" max="100">
+          </div>
+
+          <div id="modeByCapacityBox" class="form-group" style="display: none;">
+            <label>Maksimal Peserta per Grup:</label>
+            <input type="number" id="maxPerGroup" value="12" min="1" max="100">
+          </div>
+
+          <button type="button" class="btn-primary" id="randomizeBtn">START</button>
         </div>
       </div>
 
-      <div class="card">
-        <h3>2. Pengaturan Grup</h3>
-        <div class="form-group">
-          <label>Awali Nama Grup Dengan:</label>
-          <input type="text" id="groupPrefix" value="Kelas / Grup" placeholder="Contoh: Kelas, Grup, Heat">
+      <!-- PANEL KANAN -->
+      <div>
+        <div class="results-header">
+          <h2 style="margin: 0; font-size: 20px; color: #f8fafc;">Hasil Grid Start Moto 1 & Moto 2</h2>
+          <button type="button" class="btn-success" id="exportExcelBtn" disabled>
+            Download Hasil (.xlsx)
+          </button>
         </div>
 
-        <div class="form-group">
-          <label>Metode Pembagian Grup:</label>
-          <select id="splitMode">
-            <option value="byCount">Berdasarkan Jumlah Grup</option>
-            <option value="byCapacity">Berdasarkan Maksimal per Grup</option>
-          </select>
+        <div id="resultsContainer">
+          <div class="empty-state">
+            <div style="font-size: 16px; font-weight: 600; margin-bottom: 6px; color: #94a3b8;">Belum Ada Data Acakan</div>
+            <div>Masukkan daftar pembalap di kiri, lalu klik tombol <b style="color: #fb923c;">"START"</b>.</div>
+          </div>
         </div>
-
-        <div id="modeByCountBox" class="form-group">
-          <label>Jumlah Grup:</label>
-          <input type="number" id="numGroups" value="1" min="1" max="100">
-        </div>
-
-        <div id="modeByCapacityBox" class="form-group" style="display: none;">
-          <label>Maksimal Peserta per Grup:</label>
-          <input type="number" id="maxPerGroup" value="12" min="1" max="100">
-        </div>
-
-        <button type="button" class="btn-primary" id="randomizeBtn">START</button>
       </div>
     </div>
+  </div>
 
-    <!-- PANEL KANAN -->
-    <div>
-      <div class="results-header">
-        <h2 style="margin: 0; font-size: 20px; color: #f8fafc;">Hasil Grid Start Moto 1 & Moto 2</h2>
-        <button type="button" class="btn-success" id="exportExcelBtn" disabled>
-          Download Hasil (.xlsx)
-        </button>
+  <!-- =========================================================
+       HALAMAN 2: GIVEAWAY COMMENT PICKER
+  ========================================================= -->
+  <div id="giveawaySection" class="tab-section">
+    <div class="main-grid">
+      <!-- PANEL KIRI GIVEAWAY -->
+      <div>
+        <div class="card">
+          <h3>1. Daftar Komentar / Peserta</h3>
+          <div style="font-size: 12.5px; color: #94a3b8; line-height: 1.5;">
+            Copy-paste daftar komentar dari Instagram/YouTube atau nama peserta (1 baris = 1 komentar). Format bebas, misal: <code style="color:#fdba74;">@username - komentar</code> atau langsung nama peserta.
+          </div>
+
+          <textarea id="commentsInput" style="height: 190px;" placeholder="Paste daftar komentar atau nama di sini...">@andi_racing - Bismillah menang jersey!
+@budi.speed - Gaspol terus eventnya mantap
+@citra_kids - Ikut meramaikan giveaway #aspina
+@dimas.rider - Semoga rezeki anak sholeh
+@eko_pushbike - Mantap sukses selalu panitia!
+@andi_racing - Komentar kedua biar menang
+@fajar_99 - Hadir menyimak live!
+@gita.putri - Bismillah dapat doorprize
+@hendra_mx - Keren banget acaranya min
+@indra.pamekasan - Gas terus bosku!</textarea>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+            <span class="badge-count" id="validEntriesBadge">Peserta Valid: 9</span>
+            <button type="button" class="btn-link" style="color: #94a3b8; margin-top: 0;" id="clearCommentsBtn">Kosongkan</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>2. Aturan Undian</h3>
+          <div class="form-group">
+            <label>Judul Hadiah / Doorprize (Opsional):</label>
+            <input type="text" id="prizeTitleInput" placeholder="Contoh: Juara 1 - Helm Fullface / Jersey">
+          </div>
+
+          <div class="form-group">
+            <label>Jumlah Pemenang Sekaligus:</label>
+            <input type="number" id="winnerCountInput" value="1" min="1" max="50">
+          </div>
+
+          <div class="form-group">
+            <label>Filter Kata Kunci Wajib (Opsional):</label>
+            <input type="text" id="keywordFilterInput" placeholder="Contoh: #aspina (kosongkan jika bebas)">
+          </div>
+
+          <label class="checkbox-row">
+            <input type="checkbox" id="filterDuplicateCheck" checked>
+            <span>Filter duplikat (1 akun = 1 peluang)</span>
+          </label>
+
+          <label class="checkbox-row">
+            <input type="checkbox" id="excludePastWinnersCheck" checked>
+            <span>Keluarkan pemenang yang sudah menang</span>
+          </label>
+
+          <button type="button" class="btn-primary" id="pickWinnerBtn" style="margin-top: 8px;">
+            🎲 ACAK PEMENANG GIVEAWAY
+          </button>
+        </div>
       </div>
 
-      <div id="resultsContainer">
-        <div class="empty-state">
-          <div style="font-size: 16px; font-weight: 600; margin-bottom: 6px; color: #94a3b8;">Belum Ada Data Acakan</div>
-          <div>Masukkan daftar pembalap di kiri, lalu klik tombol <b style="color: #f87171;">"START"</b>.</div>
+      <!-- PANEL KANAN GIVEAWAY -->
+      <div>
+        <div class="stage-box">
+          <div class="stage-label" id="stagePrizeLabel">PANGGUNG UNDIAN GIVEAWAY</div>
+          <div class="rolling-display" id="rollingDisplay">
+            <span>Siap Mengundi Pemenang</span>
+            <span class="sub-comment">Klik tombol "ACAK PEMENANG GIVEAWAY" di sebelah kiri</span>
+          </div>
+        </div>
+
+        <div class="results-header">
+          <h2 style="margin: 0; font-size: 18px; color: #f8fafc;">Daftar Pemenang Terpilih (<span id="winnersTotalCount">0</span>)</h2>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn-secondary" id="resetWinnersBtn">Reset Riwayat</button>
+            <button type="button" class="btn-success" id="exportWinnersBtn" disabled>Download Pemenang (.xlsx)</button>
+          </div>
+        </div>
+
+        <div id="winnersContainer">
+          <div class="empty-state" style="padding: 40px 20px;">
+            <div style="font-size: 15px; font-weight: 600; color: #94a3b8;">Belum Ada Pemenang</div>
+            <div style="font-size: 13px; margin-top: 4px;">Hasil pemenang yang terpilih akan tercatat otomatis di sini.</div>
+          </div>
         </div>
       </div>
     </div>
@@ -381,6 +660,49 @@ Rider 12 - Linda</textarea>
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      // NAVIGASI TAB
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabSections = document.querySelectorAll('.tab-section');
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabBtns.forEach(b => b.classList.remove('active'));
+          tabSections.forEach(sec => sec.classList.remove('active'));
+
+          btn.classList.add('active');
+          const targetId = btn.getAttribute('data-target');
+          document.getElementById(targetId).classList.add('active');
+        });
+      });
+
+      function shuffleArray(array) {
+        const arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
+          let j;
+          if (window.crypto && window.crypto.getRandomValues) {
+            const randBuf = new Uint32Array(1);
+            window.crypto.getRandomValues(randBuf);
+            j = randBuf[0] % (i + 1);
+          } else {
+            j = Math.floor(Math.random() * (i + 1));
+          }
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+      }
+
+      function downloadCSVFallback(rows, filename) {
+        const csvContent = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename.replace('.xlsx', '.csv');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      // STARTING GRID LOGIC
       const excelFileInput = document.getElementById('excelFile');
       const participantsInput = document.getElementById('participantsInput');
       const totalCountBadge = document.getElementById('totalCountBadge');
@@ -421,23 +743,10 @@ Rider 12 - Linda</textarea>
         }
       });
 
-      // Helper fallback download CSV jika library XLSX offline/gagal load
-      function downloadCSVFallback(rows, filename) {
-        const csvContent = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = filename.replace('.xlsx', '.csv');
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-
       excelFileInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (!file) return;
 
-        // Jika file CSV dan XLSX library belum termuat, baca langsung sebagai teks
         if (file.name.toLowerCase().endsWith('.csv') && typeof XLSX === 'undefined') {
           const textReader = new FileReader();
           textReader.onload = function(ev) {
@@ -455,7 +764,7 @@ Rider 12 - Linda</textarea>
         }
 
         if (typeof XLSX === 'undefined') {
-          alert('Koneksi internet diperlukan untuk membaca file .xlsx. Atau gunakan file format .csv / copy-paste langsung ke kotak teks.');
+          alert('Koneksi internet diperlukan untuk membaca file .xlsx. Gunakan format .csv atau copy-paste langsung.');
           return;
         }
 
@@ -513,22 +822,6 @@ Rider 12 - Linda</textarea>
         XLSX.utils.book_append_sheet(wb, ws, 'Daftar Pembalap');
         XLSX.writeFile(wb, 'Template_Pembalap_RotasiGate.xlsx');
       });
-
-      function shuffleArray(array) {
-        const arr = [...array];
-        for (let i = arr.length - 1; i > 0; i--) {
-          let j;
-          if (window.crypto && window.crypto.getRandomValues) {
-            const randBuf = new Uint32Array(1);
-            window.crypto.getRandomValues(randBuf);
-            j = randBuf[0] % (i + 1);
-          } else {
-            j = Math.floor(Math.random() * (i + 1));
-          }
-          [arr[i], arr[j]] = [arr[j], arr[i]];
-        }
-        return arr;
-      }
 
       function generateGroups() {
         const participants = getParticipants();
@@ -610,7 +903,6 @@ Rider 12 - Linda</textarea>
 
       function renderGroups(groups) {
         let html = '<div class="groups-grid">';
-
         groups.forEach((group) => {
           html += `
             <div class="group-card">
@@ -636,7 +928,6 @@ Rider 12 - Linda</textarea>
             </div>
           `;
         });
-
         html += '</div>';
         resultsContainer.innerHTML = html;
       }
@@ -652,7 +943,6 @@ Rider 12 - Linda</textarea>
         });
 
         const timestamp = new Date().toISOString().slice(0, 10);
-
         if (typeof XLSX === 'undefined') {
           downloadCSVFallback(rekapRows, `Grid_Start_Balapan_${timestamp}.csv`);
           return;
@@ -664,6 +954,229 @@ Rider 12 - Linda</textarea>
         XLSX.utils.book_append_sheet(wb, wsRekap, 'Rotasi Grid Moto 1 & 2');
         XLSX.writeFile(wb, `Grid_Start_Balapan_${timestamp}.xlsx`);
       });
+
+      // GIVEAWAY COMMENT PICKER LOGIC
+      const commentsInput = document.getElementById('commentsInput');
+      const validEntriesBadge = document.getElementById('validEntriesBadge');
+      const clearCommentsBtn = document.getElementById('clearCommentsBtn');
+      const prizeTitleInput = document.getElementById('prizeTitleInput');
+      const winnerCountInput = document.getElementById('winnerCountInput');
+      const keywordFilterInput = document.getElementById('keywordFilterInput');
+      const filterDuplicateCheck = document.getElementById('filterDuplicateCheck');
+      const excludePastWinnersCheck = document.getElementById('excludePastWinnersCheck');
+      const pickWinnerBtn = document.getElementById('pickWinnerBtn');
+      const stagePrizeLabel = document.getElementById('stagePrizeLabel');
+      const rollingDisplay = document.getElementById('rollingDisplay');
+      const winnersContainer = document.getElementById('winnersContainer');
+      const winnersTotalCount = document.getElementById('winnersTotalCount');
+      const resetWinnersBtn = document.getElementById('resetWinnersBtn');
+      const exportWinnersBtn = document.getElementById('exportWinnersBtn');
+
+      let giveawayWinners = [];
+
+      function parseEntryLine(line) {
+        const match = line.match(/^([^\-:]+?)[\-:]\s*(.+)$/);
+        if (match) {
+          return {
+            user: match[1].trim(),
+            comment: match[2].trim(),
+            raw: line
+          };
+        }
+        return {
+          user: line.trim(),
+          comment: '',
+          raw: line
+        };
+      }
+
+      function getFilteredEntries() {
+        const lines = commentsInput.value
+          .split('\n')
+          .map(l => l.trim())
+          .filter(l => l !== '');
+
+        const keyword = keywordFilterInput.value.trim().toLowerCase();
+        const dedup = filterDuplicateCheck.checked;
+        const excludeWinners = excludePastWinnersCheck.checked;
+        const pastWinnerKeys = new Set(giveawayWinners.map(w => w.user.toLowerCase()));
+
+        const seenUsers = new Set();
+        const validList = [];
+
+        lines.forEach(line => {
+          if (keyword && !line.toLowerCase().includes(keyword)) {
+            return;
+          }
+          const parsed = parseEntryLine(line);
+          const userKey = parsed.user.toLowerCase();
+
+          if (excludeWinners && pastWinnerKeys.has(userKey)) {
+            return;
+          }
+          if (dedup) {
+            if (seenUsers.has(userKey)) return;
+            seenUsers.add(userKey);
+          }
+          validList.push(parsed);
+        });
+
+        return validList;
+      }
+
+      function updateValidEntriesBadge() {
+        const entries = getFilteredEntries();
+        validEntriesBadge.textContent = `Peserta Valid: ${entries.length}`;
+      }
+
+      commentsInput.addEventListener('input', updateValidEntriesBadge);
+      keywordFilterInput.addEventListener('input', updateValidEntriesBadge);
+      filterDuplicateCheck.addEventListener('change', updateValidEntriesBadge);
+      excludePastWinnersCheck.addEventListener('change', updateValidEntriesBadge);
+
+      clearCommentsBtn.addEventListener('click', () => {
+        commentsInput.value = '';
+        updateValidEntriesBadge();
+      });
+
+      function launchConfetti() {
+        const colors = ['#f97316', '#fb923c', '#22c55e', '#3b82f6', '#eab308'];
+        for (let i = 0; i < 45; i++) {
+          const piece = document.createElement('div');
+          piece.className = 'confetti-piece';
+          piece.style.left = Math.random() * 100 + 'vw';
+          piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          piece.style.animationDuration = (Math.random() * 1.5 + 1.5) + 's';
+          piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+          document.body.appendChild(piece);
+          setTimeout(() => piece.remove(), 3200);
+        }
+      }
+
+      function renderWinnersList() {
+        winnersTotalCount.textContent = giveawayWinners.length;
+        if (giveawayWinners.length === 0) {
+          exportWinnersBtn.disabled = true;
+          winnersContainer.innerHTML = `
+            <div class="empty-state" style="padding: 40px 20px;">
+              <div style="font-size: 15px; font-weight: 600; color: #94a3b8;">Belum Ada Pemenang</div>
+              <div style="font-size: 13px; margin-top: 4px;">Hasil pemenang yang terpilih akan tercatat otomatis di sini.</div>
+            </div>
+          `;
+          return;
+        }
+
+        exportWinnersBtn.disabled = false;
+        let html = '<div class="winner-card-list">';
+        giveawayWinners.forEach((w, idx) => {
+          html += `
+            <div class="winner-item">
+              <div class="winner-rank">🏆 Pemenang #${idx + 1} ${w.prize ? `— ${w.prize}` : ''}</div>
+              <div class="winner-title">${w.user}</div>
+              ${w.comment ? `<div class="winner-comment">"${w.comment}"</div>` : ''}
+            </div>
+          `;
+        });
+        html += '</div>';
+        winnersContainer.innerHTML = html;
+      }
+
+      pickWinnerBtn.addEventListener('click', () => {
+        const pool = getFilteredEntries();
+        if (pool.length === 0) {
+          alert('Tidak ada peserta/komentar valid yang bisa diundi!');
+          return;
+        }
+
+        let countToPick = parseInt(winnerCountInput.value, 10) || 1;
+        if (countToPick < 1) countToPick = 1;
+        if (countToPick > pool.length) countToPick = pool.length;
+
+        const prizeName = prizeTitleInput.value.trim();
+        stagePrizeLabel.textContent = prizeName ? `UNDIAN: ${prizeName.toUpperCase()}` : 'MENGUNDI PEMENANG GIVEAWAY...';
+
+        pickWinnerBtn.disabled = true;
+        pickWinnerBtn.textContent = 'Mengacak Komentar...';
+
+        let steps = 0;
+        const totalSteps = 22;
+        const spinInterval = setInterval(() => {
+          const randomPreview = pool[Math.floor(Math.random() * pool.length)];
+          rollingDisplay.innerHTML = `
+            <span style="color: #fdba74;">${randomPreview.user}</span>
+            ${randomPreview.comment ? `<span class="sub-comment">"${randomPreview.comment}"</span>` : ''}
+          `;
+          steps++;
+
+          if (steps >= totalSteps) {
+            clearInterval(spinInterval);
+            const shuffled = shuffleArray(pool);
+            const selected = shuffled.slice(0, countToPick);
+
+            selected.forEach(item => {
+              giveawayWinners.push({
+                user: item.user,
+                comment: item.comment,
+                prize: prizeName || 'Giveaway'
+              });
+            });
+
+            if (selected.length === 1) {
+              rollingDisplay.innerHTML = `
+                <span style="color: #4ade80;">🎉 ${selected[0].user} 🎉</span>
+                ${selected[0].comment ? `<span class="sub-comment">"${selected[0].comment}"</span>` : '<span class="sub-comment">Selamat kepada pemenang terpilih!</span>'}
+              `;
+            } else {
+              rollingDisplay.innerHTML = `
+                <span style="color: #4ade80;">🎉 ${selected.length} Pemenang Terpilih! 🎉</span>
+                <span class="sub-comment">${selected.map(s => s.user).join(', ')}</span>
+              `;
+            }
+
+            stagePrizeLabel.textContent = prizeName ? `PEMENANG: ${prizeName.toUpperCase()}` : 'SELAMAT KEPADA PEMENANG!';
+            launchConfetti();
+            renderWinnersList();
+            updateValidEntriesBadge();
+
+            pickWinnerBtn.disabled = false;
+            pickWinnerBtn.textContent = '🎲 ACAK PEMENANG GIVEAWAY';
+          }
+        }, 75);
+      });
+
+      resetWinnersBtn.addEventListener('click', () => {
+        if (giveawayWinners.length === 0) return;
+        giveawayWinners = [];
+        renderWinnersList();
+        updateValidEntriesBadge();
+        stagePrizeLabel.textContent = 'PANGGUNG UNDIAN GIVEAWAY';
+        rollingDisplay.innerHTML = `
+          <span>Siap Mengundi Pemenang</span>
+          <span class="sub-comment">Riwayat pemenang telah direset</span>
+        `;
+      });
+
+      exportWinnersBtn.addEventListener('click', () => {
+        if (giveawayWinners.length === 0) return;
+        const rows = [['No', 'Hadiah / Kategori', 'Nama / Akun Pemenang', 'Isi Komentar']];
+        giveawayWinners.forEach((w, idx) => {
+          rows.push([idx + 1, w.prize, w.user, w.comment || '-']);
+        });
+
+        const timestamp = new Date().toISOString().slice(0, 10);
+        if (typeof XLSX === 'undefined') {
+          downloadCSVFallback(rows, `Pemenang_Giveaway_${timestamp}.csv`);
+          return;
+        }
+
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.aoa_to_sheet(rows);
+        ws['!cols'] = [{ wch: 6 }, { wch: 24 }, { wch: 28 }, { wch: 45 }];
+        XLSX.utils.book_append_sheet(wb, ws, 'Pemenang Giveaway');
+        XLSX.writeFile(wb, `Pemenang_Giveaway_${timestamp}.xlsx`);
+      });
+
+      updateValidEntriesBadge();
     });
   </script>
 
