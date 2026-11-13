@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GridSync.id - Racing Group & Gate Randomizer</title>
+  <!-- Library SheetJS untuk baca & tulis file Excel (.xlsx) -->
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      margin: 0;
+      padding: 24px;
+      background-color: #090d16;
+      color: #f8fafc;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .logo-wrapper {
+      background: #ffffff;
+      padding: 14px 28px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(255, 107, 0, 0.25);
+      margin-bottom: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .logo-wrapper svg {
+      height: 68px;
+      width: auto;
+      display: block;
+    }
+    .header p {
+      margin: 4px 0 0;
+      color: #94a3b8;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+    }
+    .main-grid {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 24px;
+      max-width: 1350px;
+      margin: 0 auto;
+    }
+    @media (max-width: 900px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .card {
+      background: #121824;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+      margin-bottom: 20px;
+      border: 1px solid #1e293b;
+    }
+    .card h3 {
+      margin: 0 0 14px;
+      font-size: 16px;
+      border-bottom: 1px solid #1e293b;
+      padding-bottom: 10px;
+      color: #ef4444;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .file-upload-box {
+      display: block;
+      border: 2px dashed #334155;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+      background: #0f172a;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .file-upload-box:hover {
+      border-color: #dc2626;
+      background: #182232;
+    }
+    .file-upload-box input {
+      display: none;
+    }
+    .btn-link {
+      background: none;
+      border: none;
+      color: #f87171;
+      text-decoration: underline;
+      font-size: 13px;
+      cursor: pointer;
+      margin-top: 8px;
+      display: inline-block;
+    }
+    textarea {
+      width: 100%;
+      height: 140px;
+      margin-top: 12px;
+      padding: 10px;
+      background: #0f172a;
+      color: #f8fafc;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      font-size: 14px;
+      resize: vertical;
+    }
+    textarea:focus, select:focus, input:focus {
+      outline: none;
+      border-color: #dc2626;
+    }
+    .badge-count {
+      display: inline-block;
+      background: #1e293b;
+      color: #fca5a5;
+      font-weight: 600;
+      font-size: 13px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-top: 8px;
+      border: 1px solid #334155;
+    }
+    .form-group {
+      margin-bottom: 14px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #cbd5e1;
+    }
+    select, input[type="number"], input[type="text"] {
+      width: 100%;
+      padding: 9px 12px;
+      background: #0f172a;
+      color: #f8fafc;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+      transition: transform 0.1s, opacity 0.2s;
+    }
+    .btn-primary:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+    .btn-success {
+      padding: 10px 18px;
+      background: #16a34a;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 10px rgba(22, 163, 74, 0.3);
+    }
+    .btn-success:hover {
+      background: #15803d;
+    }
+    .btn-success:disabled {
+      background: #334155;
+      color: #64748b;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .groups-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .group-card {
+      background: #121824;
+      border-radius: 10px;
+      border-top: 4px solid #dc2626;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      overflow: hidden;
+      border-left: 1px solid #1e293b;
+      border-right: 1px solid #1e293b;
+      border-bottom: 1px solid #1e293b;
+    }
+    .group-card-header {
+      background: #0f172a;
+      padding: 10px 14px;
+      font-weight: bold;
+      font-size: 15px;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #1e293b;
+      color: #f8fafc;
+    }
+    .group-card-header span.count {
+      font-size: 12px;
+      background: #1e293b;
+      padding: 2px 8px;
+      border-radius: 12px;
+      color: #94a3b8;
+    }
+    .group-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .group-list li {
+      padding: 9px 14px;
+      border-bottom: 1px solid #1e293b;
+      font-size: 13.5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .group-list li:last-child {
+      border-bottom: none;
+    }
+    .rider-name {
+      font-weight: 500;
+      flex: 1;
+      margin-left: 4px;
+      color: #e2e8f0;
+    }
+    .gate-badges {
+      display: flex;
+      gap: 5px;
+    }
+    .badge-gate {
+      font-size: 11px;
+      font-weight: bold;
+      padding: 3px 7px;
+      border-radius: 6px;
+      min-width: 52px;
+      text-align: center;
+    }
+    .badge-gate.m1 { background: #7f1d1d; color: #fca5a5; border: 1px solid #991b1b; }
+    .badge-gate.m2 { background: #14532d; color: #86efac; border: 1px solid #166534; }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      background: #121824;
+      border-radius: 12px;
+      color: #64748b;
+      border: 1px dashed #334155;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="logo-wrapper">
+      <svg viewBox="0 0 650 155" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="GridSync.id Starting Grid Generator">
+        <g fill="#FF6B00">
+          <rect x="10" y="10" width="44" height="44" />
+          <rect x="98" y="10" width="44" height="44" />
+          <rect x="186" y="10" width="44" height="44" />
+          <rect x="54" y="54" width="44" height="44" />
+          <rect x="142" y="54" width="44" height="44" />
+          <rect x="10" y="98" width="44" height="44" />
+          <rect x="98" y="98" width="44" height="44" />
+          <rect x="186" y="98" width="44" height="44" />
+        </g>
+        <text x="245" y="62" font-family="'Arial Black', 'Impact', sans-serif" font-weight="900" font-size="64" fill="#042347" letter-spacing="-1">GRID</text>
+        <text x="245" y="116" font-family="'Arial Black', 'Impact', sans-serif" font-weight="900" font-size="64" fill="#042347" letter-spacing="-1">SYNC.id</text>
+        <text x="247" y="142" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="22.5" fill="#042347" letter-spacing="0.4">STARTING GRID GENERATOR</text>
+      </svg>
+    </div>
+    <p>Official Starting Grid Generator</p>
+  </div>
+
+  <div class="main-grid">
+    <!-- PANEL KIRI -->
+    <div>
+      <div class="card">
+        <h3>1. Data Peserta / Pembalap</h3>
+        <label class="file-upload-box" for="excelFile">
+          <div style="font-weight: 600; color: #f87171;">Klik untuk Upload File Excel (.xlsx / .csv)</div>
+          <div style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Membaca daftar pembalap pada kolom pertama</div>
+          <input type="file" id="excelFile" accept=".xlsx, .xls, .csv">
+        </label>
+        <div style="text-align: center;">
+          <button type="button" class="btn-link" id="downloadTemplateBtn">Download Contoh Template Excel</button>
+        </div>
+
+        <textarea id="participantsInput" placeholder="Atau ketik/paste daftar pembalap di sini (1 baris = 1 pembalap)...">Rider 01 - Andi
+Rider 02 - Budi
+Rider 03 - Citra
+Rider 04 - Dimas
+Rider 05 - Eko
+Rider 06 - Fajar
+Rider 07 - Gita
+Rider 08 - Hendra
+Rider 09 - Indra
+Rider 10 - Joko
+Rider 11 - Kevin
+Rider 12 - Linda</textarea>
+        <div>
+          <span class="badge-count" id="totalCountBadge">Total Peserta: 12</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>2. Pengaturan Grup</h3>
+        <div class="form-group">
+          <label>Awali Nama Grup Dengan:</label>
+          <input type="text" id="groupPrefix" value="Kelas / Grup" placeholder="Contoh: Kelas, Grup, Heat">
+        </div>
+
+        <div class="form-group">
+          <label>Metode Pembagian Grup:</label>
+          <select id="splitMode">
+            <option value="byCount">Berdasarkan Jumlah Grup</option>
+            <option value="byCapacity">Berdasarkan Maksimal per Grup</option>
+          </select>
+        </div>
+
+        <div id="modeByCountBox" class="form-group">
+          <label>Jumlah Grup:</label>
+          <input type="number" id="numGroups" value="1" min="1" max="100">
+        </div>
+
+        <div id="modeByCapacityBox" class="form-group" style="display: none;">
+          <label>Maksimal Peserta per Grup:</label>
+          <input type="number" id="maxPerGroup" value="12" min="1" max="100">
+        </div>
+
+        <button type="button" class="btn-primary" id="randomizeBtn">START</button>
+      </div>
+    </div>
+
+    <!-- PANEL KANAN -->
+    <div>
+      <div class="results-header">
+        <h2 style="margin: 0; font-size: 20px; color: #f8fafc;">Hasil Grid Start Moto 1 & Moto 2</h2>
+        <button type="button" class="btn-success" id="exportExcelBtn" disabled>
+          Download Hasil (.xlsx)
+        </button>
+      </div>
+
+      <div id="resultsContainer">
+        <div class="empty-state">
+          <div style="font-size: 16px; font-weight: 600; margin-bottom: 6px; color: #94a3b8;">Belum Ada Data Acakan</div>
+          <div>Masukkan daftar pembalap di kiri, lalu klik tombol <b style="color: #f87171;">"START"</b>.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const excelFileInput = document.getElementById('excelFile');
+      const participantsInput = document.getElementById('participantsInput');
+      const totalCountBadge = document.getElementById('totalCountBadge');
+      const splitModeSelect = document.getElementById('splitMode');
+      const modeByCountBox = document.getElementById('modeByCountBox');
+      const modeByCapacityBox = document.getElementById('modeByCapacityBox');
+      const numGroupsInput = document.getElementById('numGroups');
+      const maxPerGroupInput = document.getElementById('maxPerGroup');
+      const groupPrefixInput = document.getElementById('groupPrefix');
+      const randomizeBtn = document.getElementById('randomizeBtn');
+      const exportExcelBtn = document.getElementById('exportExcelBtn');
+      const resultsContainer = document.getElementById('resultsContainer');
+      const downloadTemplateBtn = document.getElementById('downloadTemplateBtn');
+
+      let generatedGroups = [];
+
+      function getParticipants() {
+        return participantsInput.value
+          .split('\n')
+          .map(line => line.trim())
+          .filter(line => line !== '');
+      }
+
+      function updateCountBadge() {
+        const list = getParticipants();
+        totalCountBadge.textContent = `Total Peserta: ${list.length}`;
+      }
+
+      participantsInput.addEventListener('input', updateCountBadge);
+
+      splitModeSelect.addEventListener('change', () => {
+        if (splitModeSelect.value === 'byCount') {
+          modeByCountBox.style.display = 'block';
+          modeByCapacityBox.style.display = 'none';
+        } else {
+          modeByCountBox.style.display = 'none';
+          modeByCapacityBox.style.display = 'block';
+        }
+      });
+
+      // Helper fallback download CSV jika library XLSX offline/gagal load
+      function downloadCSVFallback(rows, filename) {
+        const csvContent = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename.replace('.xlsx', '.csv');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      excelFileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Jika file CSV dan XLSX library belum termuat, baca langsung sebagai teks
+        if (file.name.toLowerCase().endsWith('.csv') && typeof XLSX === 'undefined') {
+          const textReader = new FileReader();
+          textReader.onload = function(ev) {
+            const lines = ev.target.result.split(/\r?\n/).map(l => l.split(',')[0].replace(/^"|"$/g, '').trim()).filter(Boolean);
+            if (lines.length > 0 && ['nama', 'peserta', 'pembalap', 'rider', 'no', 'nama pembalap'].includes(lines[0].toLowerCase())) {
+              lines.shift();
+            }
+            if (lines.length > 0) {
+              participantsInput.value = lines.join('\n');
+              updateCountBadge();
+            }
+          };
+          textReader.readAsText(file);
+          return;
+        }
+
+        if (typeof XLSX === 'undefined') {
+          alert('Koneksi internet diperlukan untuk membaca file .xlsx. Atau gunakan file format .csv / copy-paste langsung ke kotak teks.');
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const data = new Uint8Array(event.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+          const rows = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+
+          let names = [];
+          rows.forEach((row, index) => {
+            if (row && row[0] !== undefined && row[0] !== null) {
+              const val = String(row[0]).trim();
+              if (index === 0 && ['nama', 'peserta', 'pembalap', 'rider', 'no', 'nama pembalap'].includes(val.toLowerCase())) {
+                return;
+              }
+              if (val !== '') names.push(val);
+            }
+          });
+
+          if (names.length > 0) {
+            participantsInput.value = names.join('\n');
+            updateCountBadge();
+          } else {
+            alert('File kosong atau tidak ditemukan data pada kolom pertama.');
+          }
+        };
+        reader.readAsArrayBuffer(file);
+      });
+
+      downloadTemplateBtn.addEventListener('click', () => {
+        const templateData = [
+          ['Nama Pembalap'],
+          ['Andi Pratama'],
+          ['Budi Santoso'],
+          ['Citra Lestari'],
+          ['Dimas Anggara'],
+          ['Eko Saputra'],
+          ['Fajar Nugroho'],
+          ['Gita Permata'],
+          ['Hendra Wijaya'],
+          ['Indra Kusuma'],
+          ['Joko Susilo'],
+          ['Kevin Sanjaya']
+        ];
+
+        if (typeof XLSX === 'undefined') {
+          downloadCSVFallback(templateData, 'Template_Pembalap_RotasiGate.csv');
+          return;
+        }
+
+        const ws = XLSX.utils.aoa_to_sheet(templateData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Daftar Pembalap');
+        XLSX.writeFile(wb, 'Template_Pembalap_RotasiGate.xlsx');
+      });
+
+      function shuffleArray(array) {
+        const arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
+          let j;
+          if (window.crypto && window.crypto.getRandomValues) {
+            const randBuf = new Uint32Array(1);
+            window.crypto.getRandomValues(randBuf);
+            j = randBuf[0] % (i + 1);
+          } else {
+            j = Math.floor(Math.random() * (i + 1));
+          }
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+      }
+
+      function generateGroups() {
+        const participants = getParticipants();
+        const total = participants.length;
+
+        if (total === 0) {
+          alert('Masukkan daftar peserta terlebih dahulu!');
+          return false;
+        }
+
+        const shuffledParticipants = shuffleArray(participants);
+        const mode = splitModeSelect.value;
+        const prefix = groupPrefixInput.value.trim() || 'Kelas';
+        let targetGroupCount = 1;
+
+        if (mode === 'byCount') {
+          targetGroupCount = parseInt(numGroupsInput.value, 10) || 1;
+          if (targetGroupCount < 1) targetGroupCount = 1;
+          if (targetGroupCount > total) targetGroupCount = total;
+        } else {
+          const maxCap = parseInt(maxPerGroupInput.value, 10) || 1;
+          targetGroupCount = Math.ceil(total / (maxCap < 1 ? 1 : maxCap));
+        }
+
+        const groups = Array.from({ length: targetGroupCount }, (_, i) => ({
+          name: `${prefix} ${i + 1}`,
+          riders: []
+        }));
+
+        shuffledParticipants.forEach((riderName, index) => {
+          const groupIndex = index % targetGroupCount;
+          groups[groupIndex].riders.push({ name: riderName });
+        });
+
+        groups.forEach(group => {
+          const groupSize = group.riders.length;
+          let gatesMoto1 = Array.from({ length: groupSize }, (_, i) => i + 1);
+          gatesMoto1 = shuffleArray(gatesMoto1);
+
+          let shift = Math.floor(groupSize / 2);
+          if (shift === 0) shift = 1;
+
+          group.riders.forEach((rider, idx) => {
+            const m1 = gatesMoto1[idx];
+            rider.moto1 = m1;
+            let m2 = ((m1 - 1 + shift) % groupSize) + 1;
+            rider.moto2 = m2;
+          });
+
+          group.riders.sort((a, b) => a.moto1 - b.moto1);
+        });
+
+        generatedGroups = groups;
+        renderGroups(groups);
+        exportExcelBtn.disabled = false;
+        return true;
+      }
+
+      randomizeBtn.addEventListener('click', () => {
+        if (getParticipants().length === 0) {
+          alert('Masukkan daftar peserta terlebih dahulu!');
+          return;
+        }
+
+        randomizeBtn.disabled = true;
+        randomizeBtn.textContent = 'Menghitung Rotasi Gate...';
+        
+        let ticks = 0;
+        const interval = setInterval(() => {
+          generateGroups();
+          ticks++;
+          if (ticks >= 5) {
+            clearInterval(interval);
+            randomizeBtn.disabled = false;
+            randomizeBtn.textContent = 'ACAK & ROTASI GATE START';
+          }
+        }, 80);
+      });
+
+      function renderGroups(groups) {
+        let html = '<div class="groups-grid">';
+
+        groups.forEach((group) => {
+          html += `
+            <div class="group-card">
+              <div class="group-card-header">
+                <span>${group.name}</span>
+                <span class="count">${group.riders.length} Pembalap</span>
+              </div>
+              <ul class="group-list">
+                <li style="background: #0f172a; font-size: 12px; font-weight: bold; color: #94a3b8; padding: 6px 14px;">
+                  <span>Nama Pembalap</span>
+                  <span style="display: flex; gap: 8px;"><span>Gate M1</span><span>Gate M2</span></span>
+                </li>
+                ${group.riders.map(rider => `
+                  <li>
+                    <span class="rider-name">${rider.name}</span>
+                    <div class="gate-badges">
+                      <span class="badge-gate m1" title="Gate Moto 1">M1: ${rider.moto1}</span>
+                      <span class="badge-gate m2" title="Gate Moto 2">M2: ${rider.moto2}</span>
+                    </div>
+                  </li>
+                `).join('')}
+              </ul>
+            </div>
+          `;
+        });
+
+        html += '</div>';
+        resultsContainer.innerHTML = html;
+      }
+
+      exportExcelBtn.addEventListener('click', () => {
+        if (generatedGroups.length === 0) return;
+
+        const rekapRows = [['Grup / Kelas', 'Nama Pembalap', 'Gate Moto 1', 'Gate Moto 2']];
+        generatedGroups.forEach(group => {
+          group.riders.forEach(rider => {
+            rekapRows.push([group.name, rider.name, `Gate ${rider.moto1}`, `Gate ${rider.moto2}`]);
+          });
+        });
+
+        const timestamp = new Date().toISOString().slice(0, 10);
+
+        if (typeof XLSX === 'undefined') {
+          downloadCSVFallback(rekapRows, `Grid_Start_Balapan_${timestamp}.csv`);
+          return;
+        }
+
+        const wb = XLSX.utils.book_new();
+        const wsRekap = XLSX.utils.aoa_to_sheet(rekapRows);
+        wsRekap['!cols'] = [{ wch: 18 }, { wch: 30 }, { wch: 15 }, { wch: 15 }];
+        XLSX.utils.book_append_sheet(wb, wsRekap, 'Rotasi Grid Moto 1 & 2');
+        XLSX.writeFile(wb, `Grid_Start_Balapan_${timestamp}.xlsx`);
+      });
+    });
+  </script>
+
+</body>
+</html>
